@@ -41,11 +41,10 @@ public partial class _Default : System.Web.UI.Page
         connection.Close();
         if (lstSelect.Count > 1)
         {
-            Session["account"] = lstSelect[1].ToString();
-            Session["folowerId"] = lstSelect[2].ToString();
-            Session["username"] = lstSelect[3].ToString();
-            Session["password"] = lstSelect[4].ToString();
-            Session["name"] = lstSelect[5].ToString();
+            Session["account"] = lstSelect[1].ToString().Trim();
+            Session["username"] = lstSelect[2].ToString().Trim();
+            Session["password"] = lstSelect[3].ToString().Trim();
+            Session["name"] = lstSelect[4].ToString().Trim();
             Session["riskFactor"] = lstSelect[0];
 
             Response.Redirect(Login1.DestinationPageUrl);       // + "?field1=" + lstSelect[3].ToString());

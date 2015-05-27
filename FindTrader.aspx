@@ -55,6 +55,8 @@
             
         </asp:GridView>
     </div>
+    <br />
+    <asp:Button ID="Button1" runat="server" onclick="Button1_Click" Text="Back" />
     </form>
 </body>
 </html>

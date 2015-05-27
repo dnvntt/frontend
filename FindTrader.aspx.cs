@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 public partial class FindTrader : System.Web.UI.Page
 {
-    String followerId;
+    String followeeId;
     NpgsqlConnection connection;
     List<Trader> listTrader;
 
@@ -23,7 +23,7 @@ public partial class FindTrader : System.Web.UI.Page
     {
         connection = new NpgsqlConnection("Server=127.0.0.1;Port=5432;User Id=postgres;Password=123456;Database=zulu;");
         String name = (string)(Session["name"]);
-        followerId = (string)(Session["folowerId"]);
+        followeeId = (string)(Session["account"]);
 
         string SQL = "select *  from  trader order by numberfollow desc; ";
         connection.Open();
@@ -54,8 +54,8 @@ public partial class FindTrader : System.Web.UI.Page
         
             String money =  ((TextBox) row.FindControl("txbox1")).Text;
             String maxOpen = ((TextBox)row.FindControl("txbox2")).Text;
-
-            string SQL = "insert into  follower (followerid,traderid,moneyallocate,maxopen) VALUES (" + followerId.Trim() + ",'" + traderid + "'," + money + "," + maxOpen + ");";
+            String transactionid = followeeId + "_" + traderid;
+            string SQL = "insert into  following (id,traderid,moneyallocate,maxopen,transactionid) VALUES ('" + followeeId + "','" + traderid + "'," + money + "," + maxOpen + ",'" + transactionid + "');";
             NpgsqlCommand command = new NpgsqlCommand(SQL, connection);
             command.ExecuteNonQuery();
             
@@ -63,12 +63,16 @@ public partial class FindTrader : System.Web.UI.Page
 
             int numberOfFollow = Convert.ToInt32(traderFollow.numberfollow) +1;
             double moneyFollow = Convert.ToDouble(traderFollow.monneyfollow) + Convert.ToDouble(money);
-            SQL = "update  trader set numberfollow= " + numberOfFollow + " , monneyfollow = " + moneyFollow + " where traderid='"+ traderid +"';";
+            SQL = "update trader set numberfollow= " + numberOfFollow + " , monneyfollow = " + moneyFollow + " where traderid='"+ traderid +"';";
             command = new NpgsqlCommand(SQL, connection);
             command.ExecuteNonQuery();
             connection.Close();
             
             Server.Transfer("Member.aspx", true);
         }
+    }
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        Server.Transfer("Member.aspx", true);
     }
 }

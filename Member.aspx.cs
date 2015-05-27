@@ -16,7 +16,7 @@ public partial class member : System.Web.UI.Page
 {
     String username ;
     String password ;
-    String followerId;
+    String followeeId;
     int riskFactor;
     NpgsqlConnection connection;
     List<Trader> listTraderFollow;
@@ -27,7 +27,7 @@ public partial class member : System.Web.UI.Page
         String name = (string)(Session["name"]);
         username = (string)(Session["username"]);  
         password = (string)(Session["password"]);
-        followerId = (string)(Session["folowerId"]);
+        followeeId = (string)(Session["account"]);
         riskFactor = (int)(Session["riskFactor"]);
         
         if (!IsPostBack)
@@ -35,7 +35,7 @@ public partial class member : System.Web.UI.Page
             RadSlider1.Value = riskFactor;
         }
 
-        string SQL = "select b.traderid,b.username,b.numberfollow,b.monneyfollow,a.moneyAllocate,a.maxOpen   from follower a, trader b  where followerid= '" + followerId + "' and a.traderId = b.traderId; ";
+        string SQL = "select b.traderid,b.username,b.numberfollow,b.monneyfollow,a.moneyAllocate,a.maxOpen   from following a, trader b  where id= '" + followeeId + "' and a.traderId = b.traderId; ";
         connection.Open();
         DS = new DataSet("DS1");
         NpgsqlDataAdapter DA = new NpgsqlDataAdapter();
@@ -83,7 +83,7 @@ public partial class member : System.Web.UI.Page
             string money = row.Cells[2].Text.Trim();
 
             connection.Open();
-            string SQL = "delete from  follower where followerid ='" + followerId.Trim() + "' and  traderid ='" + traderid + "';";
+            string SQL = "delete from  following where id ='" + followeeId.Trim() + "' and  traderid ='" + traderid + "';";
             NpgsqlCommand command = new NpgsqlCommand(SQL, connection);
             command.ExecuteNonQuery();
 
